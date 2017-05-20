@@ -79,8 +79,8 @@ UKF::UKF() {
   S_ = MatrixXd(n_z_, n_z_);
   Zsig_ = MatrixXd(n_z_, n_sigma_);
 
-  H_ = MatrixXd(2, n_x_);
-  H_ << 1, 0, 0, 0, 0,
+  H_laser_ = MatrixXd(2, n_x_);
+  H_laser_ << 1, 0, 0, 0, 0,
     0, 1, 0, 0, 0;
 
   I_ = MatrixXd::Identity(n_x_, n_x_);
@@ -153,17 +153,17 @@ void UKF::Prediction(double delta_t) {
  * @param {MeasurementPackage} meas_package
  */
 void UKF::UpdateLidar(MeasurementPackage meas_package) {
-  VectorXd x_pred = H_ * x_;
+  VectorXd x_pred = H_laser_ * x_;
   VectorXd diff = meas_package.raw_measurements_ - x_pred;
 
-  MatrixXd Ht = H_.transpose();
+  MatrixXd Ht = H_laser_.transpose();
   MatrixXd PHt = P_ * Ht;
-  MatrixXd S = (H_ * PHt) + R_laser_;
+  MatrixXd S = (H_laser_ * PHt) + R_laser_;
   MatrixXd Si = S.inverse();
   MatrixXd K = PHt * Si;
 
   x_ = x_ + (K * diff);
-  P_ = (I_ - K * H_) * P_;
+  P_ = (I_ - K * H_laser_) * P_;
 
   NIS_laser_ = diff.transpose() * Si * diff;
 }
