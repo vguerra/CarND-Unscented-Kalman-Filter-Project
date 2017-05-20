@@ -115,16 +115,38 @@ public:
   void UpdateLidar(MeasurementPackage meas_package);
 
   /**
-   * Updates the state and the state covariance matrix using a radar measurement
+   * Updates the state vector and the state covariance matrix using a radar measurement
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
 
+  /**
+   * Computes the Augmented version of the Sigma points
+   */
   MatrixXd AugmentedSigmaPoints();
+
+  /**
+   * Predicts the Sigma points.
+   * @param Xsig_aug Augmented Sigma points.
+   * @param delta_t Enlapsed time since last measurement.
+   */
   void SigmaPointPrediction(const MatrixXd& Xsig_aug, double delta_t);
+
+  /**
+   * Predicts the state vector and the state covariance matrix
+   */
   void PredictMeanAndCovariance();
+
+  /**
+   * Predicts the radar measurement
+   */
   void PredictRadarMeasurement();
-  void UpdateState(VectorXd z);
+
+  /**
+   * Performs the UKF update
+   * @param z The radar measurement.
+   */
+void UpdateState(VectorXd z);
 };
 
 #endif /* UKF_H */
