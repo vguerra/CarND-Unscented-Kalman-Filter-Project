@@ -209,6 +209,11 @@ MatrixXd UKF::AugmentedSigmaPoints() {
   return Xsig_aug;
 }
 
+/**
+ * Predicts the Sigma points.
+ * @param Xsig_aug Augmented Sigma points.
+ * @param delta_t Enlapsed time since last measurement.
+ */
 void UKF::SigmaPointPrediction(const MatrixXd& Xsig_aug, double delta_t) {
 
   double delta_t_2 = delta_t * delta_t;
@@ -253,6 +258,9 @@ void UKF::SigmaPointPrediction(const MatrixXd& Xsig_aug, double delta_t) {
   }
 }
 
+/**
+ * Predicts the state vector and the state covariance matrix
+ */
 void UKF::PredictMeanAndCovariance() {
   VectorXd x = VectorXd::Zero(n_x_);
   MatrixXd P = MatrixXd::Zero(n_x_, n_x_);
@@ -271,8 +279,10 @@ void UKF::PredictMeanAndCovariance() {
   P_ = P;
 }
 
+/**
+ * Predicts the radar measurement
+ */
 void UKF::PredictRadarMeasurement() {
-  //transform sigma points into measurement space
   for (int j = 0; j < n_sigma_; ++j) {
     float px = Xsig_pred_(0, j);
     float py = Xsig_pred_(1, j);
@@ -304,6 +314,10 @@ void UKF::PredictRadarMeasurement() {
   }
 }
 
+/**
+ * Performs the UKF update
+ * @param z The radar measurement.
+ */
 void UKF::UpdateState(VectorXd z) {
   MatrixXd Tc = MatrixXd(n_x_, n_z_);
   Tc.fill(0.0);
