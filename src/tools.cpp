@@ -30,3 +30,7 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   return rmse.array().sqrt();
 
 }
+
+double Tools::NormalizeAngle(double angle) {
+  return atan2(sin(angle), cos(angle));
+}

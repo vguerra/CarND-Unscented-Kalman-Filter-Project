@@ -74,6 +74,17 @@ public:
   ///* the current NIS for laser
   double NIS_laser_;
 
+  int n_sigma_;
+  int n_z_;
+  MatrixXd R_radar_;
+  MatrixXd R_laser_;
+
+  MatrixXd Zsig_;
+  VectorXd z_pred_;
+  MatrixXd S_;
+  MatrixXd H_;
+  MatrixXd I_;
+
   /**
    * Constructor
    */
@@ -108,6 +119,12 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  MatrixXd AugmentedSigmaPoints();
+  void SigmaPointPrediction(const MatrixXd& Xsig_aug, double delta_t);
+  void PredictMeanAndCovariance();
+  void PredictRadarMeasurement();
+  void UpdateState(VectorXd z);
 };
 
 #endif /* UKF_H */
