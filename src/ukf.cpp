@@ -8,8 +8,6 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
 
-//https://discussions.udacity.com/t/numerical-instability-of-the-implementation/230449/7?u=victor_guerra_986699
-
 /**
  * Initializes Unscented Kalman filter
  */
@@ -65,7 +63,7 @@ UKF::UKF() {
   // State covariance Matrix
   P_ = MatrixXd::Identity(n_x_, n_x_);
 
-  //
+  // Measurement noise covariance matrix initialization
   R_radar_ = MatrixXd::Zero(n_z_, n_z_);
   R_radar_(0, 0) = std_radr_*std_radr_;
   R_radar_(1, 1) = std_radphi_*std_radphi_;
@@ -79,9 +77,11 @@ UKF::UKF() {
   S_ = MatrixXd(n_z_, n_z_);
   Zsig_ = MatrixXd(n_z_, n_sigma_);
 
+  // Laser measuerment matrix initialization
   H_laser_ = MatrixXd(2, n_x_);
   H_laser_ << 1, 0, 0, 0, 0,
     0, 1, 0, 0, 0;
+
 
   I_ = MatrixXd::Identity(n_x_, n_x_);
 
@@ -180,6 +180,9 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   NIS_radar_ = diff.transpose() * S_.inverse() * diff;
 }
 
+/**
+ * Computes augmented Sigma points
+ */
 MatrixXd UKF::AugmentedSigmaPoints() {
   VectorXd x_aug = VectorXd::Zero(n_aug_);
   MatrixXd P_aug = MatrixXd::Zero(n_aug_, n_aug_);

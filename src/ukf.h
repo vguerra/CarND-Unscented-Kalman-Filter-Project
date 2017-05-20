@@ -80,8 +80,10 @@ public:
   //* Radar measurement dimension
   int n_z_;
 
-  //*
+  //* Radar measurement noise covariance matrix
   MatrixXd R_radar_;
+
+  //* Laser measurement noise covariance matrix
   MatrixXd R_laser_;
 
   MatrixXd Zsig_;
